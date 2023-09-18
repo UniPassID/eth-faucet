@@ -25,7 +25,7 @@ var (
 	queueCapFlag = flag.Int("queuecap", 100, "Maximum transactions waiting to be sent")
 	versionFlag  = flag.Bool("version", false, "Print version number")
 
-	payoutFlag   = flag.Int("faucet.amount", 1, "Number of Ethers to transfer per user request")
+	payoutFlag   = flag.Int("faucet.amount", 5, "Number of Tokens to transfer per user request")
 	intervalFlag = flag.Int("faucet.minutes", 1440, "Number of minutes to wait between funding rounds")
 	netnameFlag  = flag.String("faucet.name", "testnet", "Network name to display on the frontend")
 	symbolFlag   = flag.String("faucet.symbol", "ETH", "Token symbol to display on the frontend")
@@ -34,6 +34,7 @@ var (
 	keyPassFlag  = flag.String("wallet.keypass", "password.txt", "Passphrase text file to decrypt keystore")
 	privKeyFlag  = flag.String("wallet.privkey", os.Getenv("PRIVATE_KEY"), "Private key hex to fund user requests with")
 	providerFlag = flag.String("wallet.provider", os.Getenv("WEB3_PROVIDER"), "Endpoint for Ethereum JSON-RPC connection")
+	tokenFlag    = flag.String("wallet.token", os.Getenv("TOKEN_ADDRESS"), "token for faucet")
 
 	hcaptchaSiteKeyFlag = flag.String("hcaptcha.sitekey", os.Getenv("HCAPTCHA_SITEKEY"), "hCaptcha sitekey")
 	hcaptchaSecretFlag  = flag.String("hcaptcha.secret", os.Getenv("HCAPTCHA_SECRET"), "hCaptcha secret")
@@ -57,7 +58,7 @@ func Execute() {
 		chainID = big.NewInt(int64(value))
 	}
 
-	txBuilder, err := chain.NewTxBuilder(*providerFlag, privateKey, chainID)
+	txBuilder, err := chain.NewTxBuilder(*providerFlag, *tokenFlag, privateKey, chainID)
 	if err != nil {
 		panic(fmt.Errorf("cannot connect to web3 provider: %w", err))
 	}

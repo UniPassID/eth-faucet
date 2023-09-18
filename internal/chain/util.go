@@ -11,6 +11,11 @@ func EtherToWei(amount int64) *big.Int {
 	return new(big.Int).Mul(big.NewInt(amount), ether)
 }
 
+func DecimalConvert(amount int64, decimals *big.Int) *big.Int {
+	token := new(big.Int).Exp(big.NewInt(10), decimals, nil)
+	return new(big.Int).Mul(big.NewInt(amount), token)
+}
+
 func Has0xPrefix(str string) bool {
 	return len(str) >= 2 && str[0] == '0' && (str[1] == 'x' || str[1] == 'X')
 }
